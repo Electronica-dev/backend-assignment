@@ -1,0 +1,278 @@
+openapi: '3.0.2'
+info:
+  title: Sample Swagger API UI
+  version: '1.0'
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+
+paths:
+  /v1/user/register:
+    post:
+      description: Register a new account by providing a username and a password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  description: Name of the user.
+                  type: string
+                  example: sammy
+                password:
+                  description: A strong password.
+                  type: string
+                  example: superstrongpassword
+      responses:
+        '200':
+          description: User successfully created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User created Successfully.
+        '400':
+          description: Username and pasword are not provided or the User already exists.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Username and Password are not provided.
+        '500':
+          description: An error occurred. Please try again later.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error creating user.
+
+  /v1/user/login:
+    post:
+      description: Login using an username and password
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    description: Name of the user.
+                    type: string
+                    example: sammy
+                  password:
+                    description: The user's password.
+                    type: string
+                    example: superstrongpassword
+      responses:
+        '200':
+          description: User successfully logged in. You can now access protected routes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login successful
+                  jwtToken:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        '400':
+          description: Username and pasword are not provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Username and Password are not provided.
+        '401':
+          description: Username and pasword are invalid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid username or password
+        '500':
+          description: An error occurred during login. Please try again later.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An error occurred during login. Please try again later.
+
+  /v1/user/logout:
+    get:
+      description: Logs you out
+      responses:
+        '200':
+          description: You have successfully logged out.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully logged out.
+        '500':
+          description: An error occurred during login. Please try again later.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An unexpected error occured. Please try again later.
+
+  /v1/user/message:
+    get:
+      description: Returns a sample message if authorized.
+      responses:
+        '200':
+          description: You have successfully authorized using JWT.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Congratulations. You are an authorized user!
+        '401':
+          description: Token has expired or user has logged out. Please login again to obtain a new token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '500':
+          description: An internal server error has occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error validating token.
+
+  /v1/public/queryPublicApi:
+    get:
+      description: Returns a sample message if authorized.
+      parameters:
+        - in: query
+          name: category
+          description: Category of the API
+          schema:
+            type: string
+            example: Anime
+        - in: query
+          name: limit
+          description: Limits the number of results in the array
+          schema:
+            type: string
+            example: 10
+      responses:
+        '200':
+          description: The query was successfully run and the results have been calculated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Succesfully queried the public database.
+                  data:
+                    type: object
+        '400':
+          description: You have provided invalid query parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid query parameters. Please recheck.
+        '500':
+          description: An internal server error has occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An unexpected error occured.
+
+  /v1/web3/getBalance:
+    get:
+      description: Returns the balance of an ethereum account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accountId:
+                  description: ID of the account you wish to check the balance of.
+                  type: string
+                  example: 0x148bbbf8afe52e3b4cef9377dae2f35354a5fbb9
+      responses:
+        '200':
+          description: The query was successfully run and the results have been calculated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Your account has 0.1 ETH.
+        '400':
+          description: A valid account ID was not provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Please provide a valid account ID
+        '500':
+          description: An internal server error has occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An unexpected error occured.
