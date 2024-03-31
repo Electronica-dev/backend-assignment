@@ -1,4 +1,5 @@
 const dotenv = require("dotenv");
+const cors = require("cors");
 import Express from "express";
 import { connectDb } from "./config/database";
 import userRouter from "./routes/userRoute";
@@ -12,6 +13,8 @@ const app = Express();
 const PORT = process.env.PORT ?? 3000;
 
 connectDb();
+
+app.use(cors());
 
 app.use(Express.json());
 
