@@ -3,6 +3,6 @@ import { getAccountBalance } from "../controllers/ethController";
 
 const ethRouter = Router();
 
-ethRouter.get("/getBalance", getAccountBalance);
+ethRouter.post("/getBalance", getAccountBalance);
 
 export default ethRouter;

@@ -234,7 +234,7 @@ paths:
                     example: An unexpected error occured.
 
   /v1/web3/getBalance:
-    get:
+    post:
       description: Returns the balance of an ethereum account.
       requestBody:
         required: true
